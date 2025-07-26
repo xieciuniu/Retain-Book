@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct AddBookView: View {
+    
+    @Bindable var viewModel = AddBookViewModel()
+    
     var body: some View {
         Form {
-            Section("Must add"){
+            Section("Book Details"){
                 HStack(alignment: .center) {
-                    TextField("Title", text: .constant(""))
+                    TextField("Title", text: $viewModel.title)
                 }
                 HStack {
-                    TextField("Author", text: .constant(""))
+                    TextField("Author", text: $viewModel.author)
                 }
                 HStack {
-                    TextField("Total Pages", text: .constant(""))
+                    TextField("Total Pages", text: $viewModel.totalPages)
                         .keyboardType(.numberPad)
                 }
             }
