@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+@Observable class AddBookViewModel {
+    var title: String = ""
+    var author: String = ""
+    var totalPages: String = ""
+}

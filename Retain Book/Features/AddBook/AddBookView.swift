@@ -9,7 +9,21 @@ import SwiftUI
 
 struct AddBookView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Form {
+            Section("Must add"){
+                HStack(alignment: .center) {
+                    TextField("Title", text: .constant(""))
+                }
+                HStack {
+                    TextField("Author", text: .constant(""))
+                }
+                HStack {
+                    TextField("Total Pages", text: .constant(""))
+                        .keyboardType(.numberPad)
+                }
+            }
+            Button("Add") {}
+        }
     }
 }
 
