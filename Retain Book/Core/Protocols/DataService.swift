@@ -11,26 +11,24 @@ protocol DataService {
     // MARK: Books Entitie
     func addBook(title: String, author: String, totalPages: Int32)
     func editBook(id: Int32, title: String?, author: String?, totalPages: Int32?)
-    func deleteBook(id: Int)
-    func fetchBooks() -> [Book]
-    func fetchBook(id: UUID) -> Book
+    func deleteBook(id: UUID)
     
     // MARK: Category Entitie
-    func addCategory()
+    func addCategory(name: String)
+    func deleteCategory(id: UUID)
+    func editCategory(id: UUID, name: String?)
     
     // MARK: KnowledgeItem
-    func addKnowledgeItem()
-    func deleteKnowledgeItem()
-    func editKnowledgeItem()
-    func fetchKnowledgeItems() -> [KnowledgeItem]
-    func setNextReviewDate()
-    func setEaseFactor()
+    func addKnowledgeItem(itemType: String, answerText: String?, questionText: String?, bookId: UUID, chapterTitle: String, noteBody: String?, noteTitle: String?)
+    func deleteKnowledgeItem(id: UUID)
+    func editKnowledgeItem(id: UUID, knowledgeItem: KnowledgeItem)
+    func setNextReviewDate(id: UUID, nextReviewDate: Date)
+    func setEaseFactor(id: UUID, srsEaseFactor: Double)
     
     // MARK: Quote
-    func addQuote()
+    func addQuote(book: UUID, text: String)
     func deleteQuote()
     func editQuote()
-    func fetchQuotes() -> [Quote]
     
     // MARK: Reading Goal
     func addReadingGoal()
