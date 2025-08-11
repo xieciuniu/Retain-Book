@@ -17,10 +17,15 @@ struct BookshelfView: View {
         NavigationStack {
             List {
                 ForEach(books){ book in
-                    VStack {
-                        Text(book.title ?? "error")
-                            .font(.headline)
-                        Text(book.author ?? "error")
+                    HStack(spacing: 10){
+                        Spacer()
+                            .frame(width: 60, height: 60)
+                            .background(.blue)
+                        VStack(alignment: .leading){
+                            Text(book.title ?? "error")
+                                .font(.headline)
+                            Text(book.author ?? "error")
+                        }
                     }
                 }
                 .onDelete(perform: viewModel.deleteBook)

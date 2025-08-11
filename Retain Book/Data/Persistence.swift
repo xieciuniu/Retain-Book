@@ -15,14 +15,14 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for i in 0..<5 {
-                    let newBook = Book(context: viewContext)
-                    newBook.id = UUID()
-                    newBook.title = "Sample Book Title \(i)"
-                    newBook.author = "Author \(i)"
-                    newBook.totalPage = Int32(200 + i * 10)
-                    newBook.currentPage = Int32(50 + i * 5)
-                    newBook.shelfStatus = "reading"
-                }
+            let newBook = Book(context: viewContext)
+            newBook.id = UUID()
+            newBook.title = "Sample Book Title \(i)"
+            newBook.author = "Author \(i)"
+            newBook.totalPage = Int32(200 + i * 10)
+            newBook.currentPage = Int32(50 + i * 5)
+            newBook.shelfStatus = "reading"
+        }
         do {
             try viewContext.save()
         } catch {
