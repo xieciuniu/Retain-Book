@@ -21,7 +21,11 @@ struct PersistenceController {
             newBook.author = "Author \(i)"
             newBook.totalPage = Int32(200 + i * 10)
             newBook.currentPage = Int32(50 + i * 5)
-            newBook.shelfStatus = "reading"
+            newBook.shelfStatus = ShelfStatus.reading.rawValue
+            newBook.coverImageData = nil
+            newBook.dateAdded = Date()
+            newBook.dateLastRead = Date().addingTimeInterval(TimeInterval(i * 60))
+            newBook.isbn = "978-83-21-12345-6"
         }
         do {
             try viewContext.save()

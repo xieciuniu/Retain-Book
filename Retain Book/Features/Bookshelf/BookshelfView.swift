@@ -9,26 +9,43 @@ import SwiftUI
 
 struct BookshelfView: View {
     
-    @Bindable var viewModel = BookshelfViewModel()
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.dateLastRead)])
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.dateLastRead, order: .reverse)], animation: .default)
     private var books: FetchedResults<Book>
+    
+    @State var viewModel: BookshelfViewModel
+     init() {
+         let coreDataService = CoreDataService(context: PersistenceController.shared.container.viewContext)
+         
+         _viewModel = State(initialValue: BookshelfViewModel(dataService: coreDataService))
+     }
     
     var body: some View {
         NavigationStack {
             List {
                 ForEach(books){ book in
                     HStack(spacing: 10){
-                        Spacer()
-                            .frame(width: 60, height: 60)
-                            .background(.blue)
+//                        Spacer()
+//                            .frame(width: 60, height: 60)
+//                            .background(.blue)
+                        if book.coverImageData != nil {
+                            Image(uiImage: viewModel.convertDataToImage(book.coverImageData!)!)
+                                .resizable()
+                                .frame(width: 60, height: 80)
+                        } else {
+                            Text("don't have cover image")
+                                .frame(width:60, height: 80)
+                        }
                         VStack(alignment: .leading){
                             Text(book.title ?? "error")
                                 .font(.headline)
                             Text(book.author ?? "error")
+                            Text(book.dateLastRead?.description ?? "error")
                         }
                     }
                 }
-                .onDelete(perform: viewModel.deleteBook)
+                .onDelete { indexSet in
+                    viewModel.deleteBook(books: Array(books), offsets: indexSet)
+                }
             }
             .navigationTitle("Bookshelf")
             .toolbar {

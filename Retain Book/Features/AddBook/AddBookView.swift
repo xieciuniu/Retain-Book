@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct AddBookView: View {
     
@@ -23,18 +24,20 @@ struct AddBookView: View {
         NavigationStack{
             Form {
                 Section("Book Details"){
-                    HStack(alignment: .center) {
                         TextField("Title", text: $viewModel.title)
-                    }
-                    HStack {
                         TextField("Author", text: $viewModel.author)
-                    }
-                    HStack {
-                        TextField("Total Pages", text: $viewModel.totalPages)
-                            .keyboardType(.numberPad)
+                        TextField("Total Pages", value: $viewModel.totalPages, format: .number)
+                }
+                Section{
+                    VStack{
+                        PhotosPicker("Add Book Cover",selection: $viewModel.coverItem, matching: .images)
+                        viewModel.coverImage?
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 300)
                     }
                 }
-                Button("Add") {}
+//                Button("Add") {}
             }
             .navigationTitle("Add New Book")
             .toolbar {
@@ -42,11 +45,14 @@ struct AddBookView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button("Add") {
                         viewModel.saveBook()
                         dismiss()
                     }
                 }
+            }
+            .onChange(of: viewModel.coverItem) {
+                viewModel.loadImage()
             }
         }
     }
