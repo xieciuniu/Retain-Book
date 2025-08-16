@@ -27,6 +27,8 @@ import PhotosUI
     }
     var shelfStatus: ShelfStatus = .toRead
     
+    var chapters: [OneChapter] = []
+    
     var coverItem: PhotosPickerItem?
     var coverImage: Image?
     
@@ -72,4 +74,31 @@ import PhotosUI
         }
     }
     
+    func addChapter() {
+        let chapter: OneChapter = OneChapter(name: "", number: Int32(chapters.count + 1))
+        chapters.append(chapter)
+    }
+    
+    func deleteChpater(_ atOffset: IndexSet) {
+        chapters.remove(atOffsets: atOffset)
+    }
+    
+    func moveChapter(from source: IndexSet, to destination: Int) {
+        chapters.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    func updateChapterNumbers() {
+        for i in 1..<chapters.count + 1 {
+            chapters[i - 1].number = Int32(i)
+        }
+    }
+    
+}
+
+struct OneChapter: Identifiable {
+    var id = UUID()
+    var name: String
+    var number: Int32
+    var startPage: Int32?
+    var endPage: Int32?
 }

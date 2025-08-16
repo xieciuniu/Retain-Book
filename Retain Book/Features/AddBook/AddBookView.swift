@@ -36,12 +36,42 @@ struct AddBookView: View {
                     .pickerStyle(.segmented)
                 }
                 Section{
-                    VStack{
-                        PhotosPicker("Add Book Cover",selection: $viewModel.coverItem, matching: .images)
+                    VStack(alignment: .center){
+                        HStack{
+                            Spacer()
+                            PhotosPicker("Add Book Cover",selection: $viewModel.coverItem, matching: .images)
+                                .padding(.horizontal, 50)
+                            Spacer()
+                        }
                         viewModel.coverImage?
                             .resizable()
                             .scaledToFit()
                             .frame(width: 300, height: 300)
+                    }
+                }
+                
+//                Section("Chapters"){
+                List {
+                    ForEach($viewModel.chapters) { $chapter in
+                        HStack{
+                            Text("\(chapter.number).")
+                            TextField("Title", text: $chapter.name)
+                            TextField("Start", value: $chapter.startPage, format: .number)
+                                .frame(width: 50)
+                            TextField("End", value: $chapter.endPage, format: .number)
+                                .frame(width: 50)
+                        }
+                    }
+                    .onDelete(perform: { atOffset in
+                        viewModel.deleteChpater(atOffset)
+                        viewModel.updateChapterNumbers()
+                    })
+                    .onMove(perform: {from, to in
+                        viewModel.moveChapter(from: from, to: to)
+                        viewModel.updateChapterNumbers()
+                    })
+                    Button("Add Chapter") {
+                        viewModel.addChapter()
                     }
                 }
             }
