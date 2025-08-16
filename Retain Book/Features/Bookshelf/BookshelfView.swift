@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookshelfView: View {
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.dateLastRead, order: .reverse)], animation: .default)
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.dateLastRead, order: .reverse)], animation: .bouncy)
     private var books: FetchedResults<Book>
     
     @State var viewModel: BookshelfViewModel
@@ -24,16 +24,14 @@ struct BookshelfView: View {
             List {
                 ForEach(books){ book in
                     HStack(spacing: 10){
-//                        Spacer()
-//                            .frame(width: 60, height: 60)
-//                            .background(.blue)
                         if book.coverImageData != nil {
                             Image(uiImage: viewModel.convertDataToImage(book.coverImageData!)!)
                                 .resizable()
-                                .frame(width: 60, height: 80)
+                                .frame(width: 60, height: 90)
                         } else {
-                            Text("don't have cover image")
-                                .frame(width:60, height: 80)
+                            Spacer()
+                                .frame(width: 60, height: 90)
+                                .background(.gray)
                         }
                         VStack(alignment: .leading){
                             Text(book.title ?? "error")
@@ -61,6 +59,7 @@ struct BookshelfView: View {
                 AddBookView()
             }
         }
+        .searchable(text: $viewModel.searchText, isPresented: $viewModel.searchIsActive)
     }
 }
 

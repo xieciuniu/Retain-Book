@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import SwiftUI
 
 struct PersistenceController {
     static let shared = PersistenceController()
@@ -22,7 +23,11 @@ struct PersistenceController {
             newBook.totalPage = Int32(200 + i * 10)
             newBook.currentPage = Int32(50 + i * 5)
             newBook.shelfStatus = ShelfStatus.reading.rawValue
-            newBook.coverImageData = nil
+            // converting resource .jpg to data object
+            if let uiImage = UIImage(named: "exampleCover") {
+                let imageData = uiImage.jpegData(compressionQuality: 1.0)
+                newBook.coverImageData = imageData
+            }
             newBook.dateAdded = Date()
             newBook.dateLastRead = Date().addingTimeInterval(TimeInterval(i * 60))
             newBook.isbn = "978-83-21-12345-6"
