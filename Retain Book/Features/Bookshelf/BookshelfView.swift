@@ -19,10 +19,20 @@ struct BookshelfView: View {
          _viewModel = State(initialValue: BookshelfViewModel(dataService: coreDataService))
      }
     
+    var filteredBooks: [Book] {
+        if viewModel.searchText.isEmpty {
+            return books.map { $0 }
+        } else {
+            return books.filter { book in
+                (book.title?.localizedCaseInsensitiveContains(viewModel.searchText) ?? false ) ||  (book.author?.localizedCaseInsensitiveContains(viewModel.searchText) ?? false)
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(books){ book in
+                ForEach(filteredBooks){ book in
                     HStack(spacing: 10){
                         if book.coverImageData != nil {
                             Image(uiImage: viewModel.convertDataToImage(book.coverImageData!)!)
@@ -37,7 +47,6 @@ struct BookshelfView: View {
                             Text(book.title ?? "error")
                                 .font(.headline)
                             Text(book.author ?? "error")
-                            Text(book.dateLastRead?.description ?? "error")
                         }
                     }
                 }
@@ -46,8 +55,9 @@ struct BookshelfView: View {
                 }
             }
             .navigationTitle("Bookshelf")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button{
                         viewModel.isShowingAddBookView = true
                     } label : {
