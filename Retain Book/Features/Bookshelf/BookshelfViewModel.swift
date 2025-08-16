@@ -14,6 +14,7 @@ import UIKit
     var isShowingAddBookView: Bool = false
     var searchText: String = ""
     var searchIsActive: Bool = false
+
     
     private var dataService: DataService
     init(dataService: DataService) {
