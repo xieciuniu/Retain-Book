@@ -17,7 +17,14 @@ import PhotosUI
     var totalPages: Int32?
     var currentPage: Int32?
     var coverImageData: Data?
-    var isbn: String?
+    var bindingIsbn: String = ""
+    var isbn: String? {
+        if bindingIsbn.isEmpty {
+            return nil
+        } else {
+            return bindingIsbn
+        }
+    }
     var shelfStatus: ShelfStatus = .toRead
     
     var coverItem: PhotosPickerItem?
@@ -54,6 +61,14 @@ import PhotosUI
         } catch {
             print("Error loading image data: \(error)")
             return nil
+        }
+    }
+    
+    func titleAndAuthorIsEmpty() -> Bool {
+        if title.isEmpty || author.isEmpty {
+            return true
+        } else {
+            return false
         }
     }
     

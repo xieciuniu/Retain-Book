@@ -13,7 +13,7 @@ struct AddBookView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var viewModel: AddBookViewModel
-   
+    
     init() {
         let coreDataService = CoreDataService(context: PersistenceController.shared.container.viewContext)
         
@@ -24,9 +24,16 @@ struct AddBookView: View {
         NavigationStack{
             Form {
                 Section("Book Details"){
-                        TextField("Title", text: $viewModel.title)
-                        TextField("Author", text: $viewModel.author)
-                        TextField("Total Pages", value: $viewModel.totalPages, format: .number)
+                    TextField("Title*", text: $viewModel.title)
+                    TextField("Author*", text: $viewModel.author)
+                    TextField("Total Pages", value: $viewModel.totalPages, format: .number)
+                    TextField("ISBN", text: $viewModel.bindingIsbn)
+                    Picker("Current status", selection: $viewModel.shelfStatus) {
+                        ForEach(ShelfStatus.allCases, id:\.self) { item in
+                            Text(item.description)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
                 Section{
                     VStack{
@@ -37,8 +44,8 @@ struct AddBookView: View {
                             .frame(width: 300, height: 300)
                     }
                 }
-//                Button("Add") {}
             }
+            // decide if keep
             .navigationTitle("Add New Book")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -49,6 +56,7 @@ struct AddBookView: View {
                         viewModel.saveBook()
                         dismiss()
                     }
+                    .disabled(viewModel.titleAndAuthorIsEmpty())
                 }
             }
             .onChange(of: viewModel.coverItem) {

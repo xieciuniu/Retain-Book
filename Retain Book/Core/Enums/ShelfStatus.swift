@@ -12,4 +12,17 @@ enum ShelfStatus: Int16, CaseIterable {
     case reading = 1
     case read = 2
     case abandoned = 3
+    
+    var description: String {
+        switch self {
+        case .toRead:
+            return "To read"
+        case .reading:
+            return "Reading"
+        case .read:
+            return "Read"
+        case .abandoned:
+            return "Abandoned"
+        }
+    }
 }
