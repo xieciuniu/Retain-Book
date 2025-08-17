@@ -27,7 +27,7 @@ import PhotosUI
     }
     var shelfStatus: ShelfStatus = .toRead
     
-    var chapters: [OneChapter] = []
+    var chapters: [ChapterPlaceholder] = []
     
     var coverItem: PhotosPickerItem?
     var coverImage: Image?
@@ -42,7 +42,8 @@ import PhotosUI
         Task{
             let coverImageData: Data? = await convertImageToData()
     
-            dataService.addBook(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus)
+            dataService.handleNewBookWithChapters(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus, chapters: chapters)
+            
         }
     }
     
@@ -75,7 +76,7 @@ import PhotosUI
     }
     
     func addChapter() {
-        let chapter: OneChapter = OneChapter(name: "", number: Int32(chapters.count + 1))
+        let chapter: ChapterPlaceholder = ChapterPlaceholder(title: "", number: Int32(chapters.count + 1))
         chapters.append(chapter)
     }
     
@@ -95,9 +96,9 @@ import PhotosUI
     
 }
 
-struct OneChapter: Identifiable {
+struct ChapterPlaceholder: Identifiable {
     var id = UUID()
-    var name: String
+    var title: String
     var number: Int32
     var startPage: Int32?
     var endPage: Int32?

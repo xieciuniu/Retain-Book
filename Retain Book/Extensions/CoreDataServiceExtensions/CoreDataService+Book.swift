@@ -8,7 +8,7 @@
 import Foundation
 
 extension CoreDataService {
-    func addBook(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus) {
+    func addBook(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus) -> Book {
         let newBook = Book(context: context)
         
         newBook.id = UUID()
@@ -27,6 +27,8 @@ extension CoreDataService {
         } catch {
             print("Failed to save book: \(error)")
         }
+        
+        return newBook
     }
     
     func deleteBook(book: Book) {
@@ -36,5 +38,10 @@ extension CoreDataService {
         } catch {
             print(error)
         }
+    }
+    
+    func handleNewBookWithChapters(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus, chapters: [ChapterPlaceholder]) {
+        let book = addBook(title: title, author: author, coverImageData: coverImageData, totalPage: totalPage, currentPage: currentPage, isbn: isbn, shelfStatus: shelfStatus)
+        addChapter(book: book, chapters: chapters)
     }
 }

@@ -55,7 +55,7 @@ struct AddBookView: View {
                     ForEach($viewModel.chapters) { $chapter in
                         HStack{
                             Text("\(chapter.number).")
-                            TextField("Title", text: $chapter.name)
+                            TextField("Title", text: $chapter.title)
                             TextField("Start", value: $chapter.startPage, format: .number)
                                 .frame(width: 50)
                             TextField("End", value: $chapter.endPage, format: .number)
