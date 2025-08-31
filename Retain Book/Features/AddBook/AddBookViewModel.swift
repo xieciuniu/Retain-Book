@@ -17,8 +17,17 @@ import PhotosUI
     var totalPages: Int32?
     var currentPage: Int32?
     var coverImageData: Data?
-    var isbn: String?
+    var bindingIsbn: String = ""
+    var isbn: String? {
+        if bindingIsbn.isEmpty {
+            return nil
+        } else {
+            return bindingIsbn
+        }
+    }
     var shelfStatus: ShelfStatus = .toRead
+    
+    var chapters: [ChapterPlaceholder] = []
     
     var coverItem: PhotosPickerItem?
     var coverImage: Image?
@@ -33,7 +42,8 @@ import PhotosUI
         Task{
             let coverImageData: Data? = await convertImageToData()
     
-            dataService.addBook(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus)
+            dataService.handleNewBookAndChapters(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus, chapters: chapters)
+            
         }
     }
     
@@ -57,4 +67,39 @@ import PhotosUI
         }
     }
     
+    func titleAndAuthorIsEmpty() -> Bool {
+        if title.isEmpty || author.isEmpty {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func addChapter() {
+        let chapter: ChapterPlaceholder = ChapterPlaceholder(title: "", number: Int32(chapters.count + 1))
+        chapters.append(chapter)
+    }
+    
+    func deleteChpater(_ atOffset: IndexSet) {
+        chapters.remove(atOffsets: atOffset)
+    }
+    
+    func moveChapter(from source: IndexSet, to destination: Int) {
+        chapters.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    func updateChapterNumbers() {
+        for i in 1..<chapters.count + 1 {
+            chapters[i - 1].number = Int32(i)
+        }
+    }
+    
+}
+
+struct ChapterPlaceholder: Identifiable {
+    var id = UUID()
+    var title: String
+    var number: Int32
+    var startPage: Int32?
+    var endPage: Int32?
 }

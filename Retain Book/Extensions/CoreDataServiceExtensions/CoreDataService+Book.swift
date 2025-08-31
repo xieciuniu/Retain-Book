@@ -8,7 +8,18 @@
 import Foundation
 
 extension CoreDataService {
-    func addBook(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus) {
+    func addBook(book: Book) {
+        
+        context.insert(book)
+        
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save book: \(error)")
+        }
+    }
+    
+    func createBook(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus) -> Book {
         let newBook = Book(context: context)
         
         newBook.id = UUID()
@@ -22,11 +33,7 @@ extension CoreDataService {
         if let isbn { newBook.isbn = isbn }
         newBook.shelfStatus = shelfStatus.rawValue
         
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save book: \(error)")
-        }
+        return newBook
     }
     
     func deleteBook(book: Book) {
@@ -36,5 +43,16 @@ extension CoreDataService {
         } catch {
             print(error)
         }
+    }
+    
+    func editBook(id: Int32, title: String?, author: String?, totalPages: Int32?) {
+        
+    }
+        
+    func handleNewBookAndChapters(title: String, author: String, coverImageData: Data?, totalPage: Int32?, currentPage: Int32?, isbn: String?, shelfStatus: ShelfStatus, chapters: [ChapterPlaceholder]) {
+        let book = createBook(title: title, author: author, coverImageData: coverImageData, totalPage: totalPage, currentPage: currentPage, isbn: isbn, shelfStatus: shelfStatus)
+        
+        addBook(book: book)
+        addChapter(book: book, chapters: chapters)
     }
 }
