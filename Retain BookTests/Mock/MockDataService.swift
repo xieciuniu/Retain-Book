@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import CoreData
 @testable import Retain_Book
 
 class MockDataService: DataService {
+    
+    var testContext: NSManagedObjectContext?
     
     // Track method calls for verification
     var addBookCallCount = 0
@@ -30,6 +33,10 @@ class MockDataService: DataService {
     var shouldThrowError = false
     var booksToReturn: [Book] = []
     
+    init(context: NSManagedObjectContext? = nil) {
+        self.testContext = context
+    }
+    
     // MARK : - DataService Protocol Implementation
     
     func addBook(book: Book) {
@@ -42,7 +49,12 @@ class MockDataService: DataService {
         lastBookTitle = title
         lastBookAuthor = author
         
-        let mockBook = Book()
+        var mockBook = Book()
+        if let context = testContext {
+            mockBook = Book(context: context)
+        } else {
+            mockBook = Book()
+        }
         mockBook.id = UUID()
         mockBook.title = title
         mockBook.author = author
