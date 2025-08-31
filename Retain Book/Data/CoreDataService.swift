@@ -9,9 +9,6 @@ import Foundation
 import CoreData
 
 class CoreDataService: DataService {
-    func editBook(id: Int32, title: String?, author: String?, totalPages: Int32?) {
-        
-    }
     
     var context: NSManagedObjectContext
     

@@ -42,7 +42,7 @@ import PhotosUI
         Task{
             let coverImageData: Data? = await convertImageToData()
     
-            dataService.handleNewBookWithChapters(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus, chapters: chapters)
+            dataService.handleNewBookAndChapters(title: title, author: author, coverImageData: coverImageData, totalPage: totalPages, currentPage: 0, isbn: isbn, shelfStatus: shelfStatus, chapters: chapters)
             
         }
     }
